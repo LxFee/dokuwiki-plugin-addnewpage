@@ -180,7 +180,7 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         $someopt = false;
 
         // Show root namespace if requested and allowed
-        if($this->getConf('addpage_showroot') && $can_create) {
+        if($this->getConf('addpage_showroot')) {
             if(empty($dest_ns)) {
                 // If no namespace has been provided, add an option for the root NS.
                 $ret .= '<option ' . (($currentns == '') ? 'selected ' : '') . ' value="">' . $this->getLang('namespaceRoot') . '</option>';
