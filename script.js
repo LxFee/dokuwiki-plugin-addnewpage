@@ -19,7 +19,11 @@ jQuery(document).ready(function() {
         // Build the new page ID and save in hidden form field
         var ns = jQuery(this).find("[name='np_cat']");
         var title = jQuery(this).find("input[name='title']");
-        var id = ns.val()+":"+title.val();
+        if (ns.val().indexOf("@INPUT@") == -1) {
+            var id = ns.val()+":"+title.val();
+        } else {
+            var id = ns.val().replace("@INPUT@", title.val());
+        }
         jQuery(this).find("input[name='id']").val(id);
 
         // Clean up the form vars, just to make the resultant URL a bit nicer

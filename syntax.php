@@ -133,13 +133,13 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
     protected function _parseNS($ns) {
         $ID=getID();
         if(strpos($ns, '@PAGE@') !== false) {
-            return cleanID(str_replace('@PAGE@', $ID, $ns));
+            return str_replace('@PAGE@', $ID, $ns);
         }
         if($ns == "@NS@") return getNS($ID);
         $ns = preg_replace("/^\.(:|$)/", dirname(str_replace(':', '/', $ID)) . "$1", $ns);
         $ns = str_replace("/", ":", $ns);
-
-        return cleanID($ns);
+        
+        return $ns;
     }
 
     /**
@@ -158,17 +158,16 @@ class syntax_plugin_addnewpage extends DokuWiki_Syntax_Plugin {
         // Whether to hide the NS selection (otherwise, show only subnamespaces).
         $hide = $this->getConf('addpage_hide');
 
-        $parsed_dest_ns = $this->_parseNS($dest_ns);
-        // Whether the user can create pages in the provided NS (or root, if no
-        // destination NS has been set.
-        $can_create = (auth_quickaclcheck($parsed_dest_ns . ":") >= AUTH_CREATE);
-
-        //namespace given, but hidden
-        if($hide && !empty($dest_ns)) {
-            if($can_create) {
+        if(!empty($dest_ns)) {
+            $parsed_dest_ns = $this->_parseNS($dest_ns);
+            //namespace given, but hidden
+            if($hide) {
                 return '<input type="hidden" name="np_cat" id="np_cat" value="' . $parsed_dest_ns . '"/>';
             } else {
-                return false;
+                $ret = '<select class="edit" id="np_cat" name="np_cat" tabindex="1">';
+                $ret .= '<option selected value="' . formText($parsed_dest_ns) . '">' . formText($parsed_dest_ns) . '</option>';
+                $ret .= '</select>';
+                return $ret;
             }
         }
 
