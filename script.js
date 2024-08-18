@@ -33,4 +33,7 @@ jQuery(document).ready(function() {
         return true;
     });
 
+    jQuery(function() {
+        /* DOKUWIKI:include script/rename.js */
+    });
 });
